@@ -1,5 +1,6 @@
 #import hyperjson as json
 import json
+from os import truncate
 import pathlib
 import logging
 import random
@@ -192,11 +193,11 @@ class Pydb:
             raise InvalidQueryError("SELECT ALL Query Error: {}".format(e))
 
     # -irreversible
-    def drop(self):
-        """delete whole database
+    def truncate(self):
+        """truncate whole table
         #CANNOT BE UNDONE
         SQL equivalent
-            : DROP **TABLENAME**;
+            : TRUNCATE TABLE **TABLENAME**;
         Raises:
             EmptyDatabaseError: [description]
             InvalidQueryError: [description]
@@ -212,7 +213,7 @@ class Pydb:
 
     def delete(self, where):
         """delete whole database or specific column/s
-        ## CANNOT BE UNDONE
+        # CANNOT BE UNDONE
         SQL equivalent
             : DELETE FROM **TABLENAME** WHERE name='Yusuf'; 
         Args:

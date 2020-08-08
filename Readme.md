@@ -40,7 +40,7 @@ print(db.all())
 # that include -> {"name": 16} and limit to 5 return columns
 ```
 ### LIMIT
-return columns to a specific limit
+return number of rows to specified limit
 ```python
 db.filter(User.age == 16)
 print(db.limit(5)) 
@@ -92,11 +92,11 @@ Update specific column(s) <br>
 db.update({"seal": True}, {"name": "Yusuf"})
 # add {"seal": True} where {"name": "Yusuf"}
 ```
-### DROP
-DROP DATABASE _TABLENAME_;
-This command is **irreversible**
+### TRUNCATE
+TRUNCATE TABLE _TABLENAME_; <br>
+This command is **irreversible** and deletes all data inside a table, but not the table itself.
 ```python
-db.drop()
+db.truncate()
 ```
 ### DELETE
 Equivalent to DELETE FROM _TABLENAME_ WHERE _KEY_=_'VALUE'_;<br>
