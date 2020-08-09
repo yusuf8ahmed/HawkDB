@@ -4,6 +4,7 @@
 - [Disclaimer](#Disclaimer)  
 - [SQL equivalent restructuring filter](#SQL-equivalent-restructuring-filter) 
 - [SQL equivalent statements](#SQL-equivalent-statements) 
+- [Complex User Queries](#Complex-Queries) 
 
 ## Disclaimer
 **This is a proof of concept**. I developed this project to challenge myself learn about the internals of databases, software design and object oriented programming.
@@ -40,7 +41,7 @@ print(db.all())
 # that include -> {"name": 16} and limit to 5 return columns
 ```
 ### LIMIT
-return number of rows to specified limit
+return number of rows up to a specified limit
 ```python
 db.filter(User.age == 16)
 print(db.limit(5)) 
@@ -79,15 +80,15 @@ returns columns the include specified keys
 db.select(["name"])
 ```
 ### INSERT
-Insert new column into database
+Insert new column into database <br>
 ```python
 db.insert({"name": "Yusuf", "age": 16,
         "money": None, "Python": True
         "Java": False})
 ```
 ### UPDATE
-UPDATE table_name SET _column1_=_'value1'_, ... WHERE _column1_=_'value1'_;
-Update specific column(s) <br>
+UPDATE table_name SET _column1_=_'value1'_, ... WHERE _column1_=_'value1'_; <br>
+Update specific column(s) 
 ```python
 db.update({"seal": True}, {"name": "Yusuf"})
 # add {"seal": True} where {"name": "Yusuf"}
@@ -104,4 +105,50 @@ Drop all columns with same key and value
 ```python
 db.delete({"name": "Yusuf"})
 ```
+
+## Complex Queries
+By using these functions you will have the ability to do anything with the database:
+
+#### function release
+return the whole table
+
+Sample usage of release()
+```python
+from pydb import Pydb, Query
+
+db = Pydb(connection="Users.json", tablename="Users")
+# No need for Query class
+
+table = db.release() #return the whole database: List[Dict[str, Any]]
+query = []
+
+for col in table: 
+    if col.get("age") != None and col.get("age") > 20:
+        # get all Users that are 20+
+        query.append(col)
+
+print(query)
+```
+
+#### function push
+delete current database and push the table given into the file
+
+Sample usage of push()
+```python
+from pydb import Pydb, Query
+
+db = Pydb(connection="Users.json", tablename="Users")
+# No need for Query class
+
+table = db.release() #return the whole database: List[Dict[str, Any]]
+query_table = []
+
+for col in table: 
+    if col.get("age") != None and col.get("age") > 20:
+        # get all Users that are 20+
+        query_table.append(col)
+
+db.push(query_table)
+```
+
 

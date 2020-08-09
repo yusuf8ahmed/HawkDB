@@ -10,6 +10,12 @@ from .filehelper import opendatabase, closedatabase
 
 class Field():
     def __init__(self, db_path, field):
+        """[summary]
+
+        Args:
+            db_path (pathlib.path): path to location of db 
+            field ([type]): the key you are searching on
+        """
         self.field = field
         self.db_path = db_path
         self.cached_bool = None
@@ -34,7 +40,6 @@ class Field():
     def __ne__(self, other):
         """
         inequality.
-        loop throught table and find ever 
         """
         validate(other, str, "where argument must be type dict")
         result = []
@@ -64,6 +69,16 @@ class Field():
 
 class Query:
     def __init__(self, db=None, QueryClass=Field):
+        """This class holds dunder getattr method and passes it 
+        to the specified QueryClass
+
+        Args:
+            db ([type], optional): db instance. Defaults to None.
+            QueryClass ([type], optional): Field class the hold all query operations. Defaults to Field.
+
+        Raises:
+            NoDbInQueryError: [description]
+        """
         self.QueryClass = QueryClass
         self.db = db
         if self.db == None:

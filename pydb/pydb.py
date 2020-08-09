@@ -5,7 +5,7 @@ import pathlib
 import logging
 import random
 
-from typing import Any, Callable, List, Dict
+from typing import Any, Callable, List, Dict, Tuple
 from .sample import sample_database
 from .errors import EmptyDatabaseError, InvalidQueryError
 from .validate import validate
@@ -53,6 +53,14 @@ class Pydb:
             return self.selectall()
 
     def limit(self, num):
+        """limit number of results
+
+        Args:
+            num (int): number to limit too
+
+        Returns:
+            List[Dict[str, Any]]: return result
+        """
         table = self.all()
         return table[0:num]
 
@@ -79,6 +87,14 @@ class Pydb:
         pass
 
     def length(self):
+        """get number of columns in database
+
+        Raises:
+            InvalidQueryError: [description]
+
+        Returns:
+            List[Dict[str, Any]]: return result
+        """
         try:
             with opendatabase(self.db_path, "r+", empty_table=False) as (data, f):
                 table = data["table"]
@@ -90,10 +106,16 @@ class Pydb:
 
     # Most common commands
     def insert(self, *new):
-        """
-        insert a column into database
+        """insert a column into database
         tuple(dict) -> json -> into file
+        
+        Raises:
+            InvalidQueryError: [description]
+
+        Returns:
+            str: "OK"
         """
+        
         validate(new, tuple, "new argument must be type dict")
         try:
             with opendatabase(self.db_path, "r+", empty_table=False) as (data, f):
@@ -119,7 +141,7 @@ class Pydb:
             EmptyDatabaseError: [description]
             InvalidQueryError: [description]
         Returns:
-            List[Dict[str, Any]]: [description]
+            str: str: "OK"
         """
         validate(set_, dict, "change argument must be type dict")
         validate(where, dict, "where argument must be type dict")
@@ -149,6 +171,7 @@ class Pydb:
         Returns:
             List[Dict[str, Any]]: [description]
         """
+        
         validate(where, list, "where argument must be type dict")
         result = []
         try:
@@ -238,10 +261,23 @@ class Pydb:
         """release will return the whole table where 
         you can do custom queries
         """
-        return self.selectall()
+        try:
+            with opendatabase(self.db_path, "r+") as (data, f):
+                closedatabase(f, data)
+                return data["table"]
+        except BaseException as e:
+            raise InvalidQueryError("SELECT ALL Query Error: {}".format(e))
 
     def push(self, table):
-        pass
+        validate(table, list, "table argument must be type list")
+        try:
+            with opendatabase(self.db_path, "r+") as (data, f):
+                data["table"] = []
+                data["table"] = table
+                closedatabase(f, data)
+            return "OK"
+        except BaseException as e:
+            raise InvalidQueryError("DELETE Query Error: {}".format(e))
 
     def filter(self, query):
         """
