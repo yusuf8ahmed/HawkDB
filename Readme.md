@@ -131,7 +131,7 @@ print(query)
 ```
 
 #### function push
-delete current database and push the table given into the file
+delete current database and push given table into database
 
 Sample usage of push()
 ```python
