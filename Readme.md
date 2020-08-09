@@ -107,12 +107,12 @@ db.delete({"name": "Yusuf"})
 ```
 
 ## Complex Queries
-By using these functions you will have the ability to do anything with the database:
+through the use of these functions you will have the ability to do anything with the database:
 
-#### function release
-return the whole table
+#### function release()
+Return the whole table
 
-Sample usage of release()
+Sample usage of **release()**
 ```python
 from pydb import Pydb, Query
 
@@ -130,10 +130,10 @@ for col in table:
 print(query)
 ```
 
-#### function push
-delete current database and push given table into database
+#### function push()
+Delete current database and push given table into database.
 
-Sample usage of push()
+Sample usage of **push()**
 ```python
 from pydb import Pydb, Query
 
