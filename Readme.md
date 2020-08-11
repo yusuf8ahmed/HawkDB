@@ -1,4 +1,6 @@
-![PYDB_logo](image/logo.svg)
+<p align="center">
+  <img src="image/logo.svg"/>
+</p> 
 
 ## Table of Contents  
 - [Disclaimer](#Disclaimer)  
