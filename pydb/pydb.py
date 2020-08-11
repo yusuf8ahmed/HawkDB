@@ -4,6 +4,7 @@ from os import truncate
 import pathlib
 import logging
 import random
+import webbrowser
 
 from typing import Any, Callable, List, Dict, Tuple
 from .sample import sample_database
@@ -11,9 +12,6 @@ from .errors import EmptyDatabaseError, InvalidQueryError
 from .validate import validate
 from .filehelper import opendatabase, closedatabase
 from .query import Query
-
-logging.basicConfig(level=logging.DEBUG)
-# logging to file
 
 
 class Pydb:
@@ -23,14 +21,18 @@ class Pydb:
         if connection isnt found then new database
         is created
         """
+        self.cached_bool = False
+        self.cached = None
+        self.filter_bool = False
+        self.filter_cache = None
         self.connection = connection
-        validate(self.connection, str, "connection argument must be type str not {}".format(
-            type(connection)))
+        validate(self.connection, str,
+                 "connection argument must be type str not {}".format(type(connection)))
         if ".json" not in self.connection:
             self.connection = self.connection + ".json"
         file = pathlib.Path(self.connection)
         if not file.is_file():
-            logging.debug("Couldn't find database make new")
+            print("Couldn't find database making a new")
             pathlib.Path("{}".format(self.connection)).touch()
             self.db_path = pathlib.Path(self.connection).resolve()
             with open(self.db_path, "w") as f:
@@ -38,13 +40,18 @@ class Pydb:
                 sample_database["tablename"] = tablename
                 f.write(json.dumps(sample_database, indent=4))
         self.db_path = pathlib.Path(self.connection).resolve()
-        self.cached_bool = False
-        self.cached = None
-        self.filter_bool = False
-        self.filter_cache = None
+        logfile = file.parent / "db.log"
+        logging.basicConfig(
+            filename=str(logfile),
+            level=logging.DEBUG,
+            format='%(asctime)s %(levelname)s %(module)s - %(funcName)s: %(message)s',
+            datefmt='%Y-%m-%d %H:%M:%S'
+        )
 
     # query result retrievers
+
     def all(self):
+        logging.debug("Getting all results")
         self.cached_bool = True
         result = self.cached
         if not result == None:
@@ -61,6 +68,7 @@ class Pydb:
         Returns:
             List[Dict[str, Any]]: return result
         """
+        logging.debug("limit all results to {}".format(num))
         table = self.all()
         return table[0:num]
 
@@ -68,23 +76,28 @@ class Pydb:
         """
         ORDER BY ASC
         """
+        logging.debug("all results asc")
         return self.all()
 
     def desc(self):
         """
         ORDER BY DESC
         """
+        logging.debug("all results desc")
         return self.all()[::-1]
 
     # query operators
     def and_(*args):
-        pass
+        logging.debug("not implemented")
+        raise NotImplementedError()
 
     def or_(*args):
-        pass
+        logging.debug("not implemented")
+        raise NotImplementedError()
 
     def not_(other):
-        pass
+        logging.debug("not implemented")
+        raise NotImplementedError()
 
     def length(self):
         """get number of columns in database
@@ -95,6 +108,7 @@ class Pydb:
         Returns:
             List[Dict[str, Any]]: return result
         """
+        logging.debug("Getting total length of database")
         try:
             with opendatabase(self.db_path, "r+", empty_table=False) as (data, f):
                 table = data["table"]
@@ -108,15 +122,16 @@ class Pydb:
     def insert(self, *new):
         """insert a column into database
         tuple(dict) -> json -> into file
-        
+
         Raises:
             InvalidQueryError: [description]
 
         Returns:
             str: "OK"
         """
-        
+
         validate(new, tuple, "new argument must be type dict")
+        logging.debug("insert: {}".format(*new))
         try:
             with opendatabase(self.db_path, "r+", empty_table=False) as (data, f):
                 table = data["table"]
@@ -145,6 +160,7 @@ class Pydb:
         """
         validate(set_, dict, "change argument must be type dict")
         validate(where, dict, "where argument must be type dict")
+        logging.debug("set: {} where: {}".format(set_, where))
         try:
             with opendatabase(self.db_path, "r+") as (data, f):
                 table = data["table"]
@@ -171,9 +187,10 @@ class Pydb:
         Returns:
             List[Dict[str, Any]]: [description]
         """
-        
+
         validate(where, list, "where argument must be type dict")
         result = []
+        logging.debug("where: {}".format(where))
         try:
             with opendatabase(self.db_path, "r+", empty_table=False) as (data, f):
                 table = data["table"]
@@ -202,6 +219,7 @@ class Pydb:
         Returns:
             List[Dict[str, Any]] : all data within database
         """
+        logging.debug("selectall")
         try:
             with opendatabase(self.db_path, "r+") as (data, f):
                 # self.cached = lambda self: self.selectall()
@@ -246,6 +264,7 @@ class Pydb:
             InvalidQueryError: [description]
         """
         validate(where, dict, "where argument must be type dict or None")
+        logging.debug("where: {}".format(where))
         try:
             with opendatabase(self.db_path, "r+") as (data, f):
                 for col in data["table"]:
@@ -256,11 +275,16 @@ class Pydb:
         except BaseException as e:
             raise InvalidQueryError("DELETE Query Error: {}".format(e))
 
+    def trivago(self):
+        logging.debug("Got Rick Rolled")
+        webbrowser.open_new("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+
     # Custom Queries
     def release(self):
         """release will return the whole table where 
         you can do custom queries
         """
+        logging.debug("releasing whole database")
         try:
             with opendatabase(self.db_path, "r+") as (data, f):
                 closedatabase(f, data)
@@ -270,6 +294,7 @@ class Pydb:
 
     def push(self, table):
         validate(table, list, "table argument must be type list")
+        logging.debug("pushing/updating whole database")
         try:
             with opendatabase(self.db_path, "r+") as (data, f):
                 data["table"] = []

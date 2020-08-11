@@ -66,6 +66,14 @@ print(db.desc())
 # that include -> {"name": "Yusuf"} and desc order
 ```
 
+### TRIVAGO
+is a hotel
+you think this is a joke 
+but i serious this is an actual method
+```python
+db.trivago() 
+```
+
 ## SQL equivalent statements
 ### SELECTALL
 Equivalent to SELECT * FROM _TABLENAME_;<br>
