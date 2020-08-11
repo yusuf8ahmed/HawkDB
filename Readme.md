@@ -2,6 +2,11 @@
   <img src="image/logo.svg"/>
 </p> 
 
+### What is the Pydb project
+Welcome! This project is a simple python3 library that uses .json files as a micro noSQL local database. While it is noSQL based database, it's functions are specifically designed with SQL statements in mind. Pydb also enables you to write more complex and speed efficient queries (Shown in [Complex User Queries](#Complex-Queries)).
+
+Check out [Disclaimer](#Disclaimer) 
+
 ## Table of Contents  
 - [Disclaimer](#Disclaimer)  
 - [SQL equivalent restructuring filter](#SQL-equivalent-restructuring-filter) 
