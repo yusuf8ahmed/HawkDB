@@ -12,7 +12,7 @@ Check out [Disclaimer](#Disclaimer)
 
 ## Table of Contents  
 - [Disclaimer](#Disclaimer)  
-- [SQL equivalent restructuring filter](#SQL-equivalent-restructuring-filter) 
+- [SQL equivalent restructuring filters](#SQL-equivalent-restructuring-filter) 
 - [SQL equivalent statements](#SQL-equivalent-statements) 
 - [Complex User Queries](#Complex-Queries) 
 
