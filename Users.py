@@ -1,20 +1,31 @@
+import time
 from pydb import Pydb, Query
-from faker import Faker
+import random
+import time
+#from faker import Faker
 
-fake = Faker() # pip install faker required 
+#fake = Faker() # pip install faker required 
 db = Pydb(connection="Users.json")
 User = Query(db)
 
-# insert random faker data
+start = time.time()
+#insert random faker data
 for x in range(101):
     db.insert({
-        "name": str(fake.name()),
-        "age": int(fake.random_number(digits=2)),
-        "fav_letter": str(fake.random_uppercase_letter())
+        "name": "Yusuf",
+        "age": "16",
+        "fav_letter": int(random.random())
     })
     
+print(round(time.time() - start, 4))
+ 
 # write your own query and statements and see the results 😊
 
-print(db.all())
+# insert - no mmap - 100 insert - 0.0988 secs 
+# insert - no mmap - 1000 insert - 9.0446 secs 
+
+#print(db.all())
+
+
 
 

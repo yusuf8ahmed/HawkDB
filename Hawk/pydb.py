@@ -1,6 +1,4 @@
-#import hyperjson as json
 import json
-from os import truncate
 import pathlib
 import logging
 import random
@@ -12,7 +10,6 @@ from .errors import EmptyDatabaseError, InvalidQueryError
 from .validate import validate
 from .filehelper import opendatabase, closedatabase
 from .query import Query
-
 
 class Pydb:
     def __init__(self, connection="pydb", tablename="pydb"):
@@ -245,7 +242,7 @@ class Pydb:
         """
         try:
             logging.warning("Delete whole database")
-            with opendatabase(self.db_path, "r+", empty_table=False) as (data, f):
+            with opendatabase(self.db_path, "r+") as (data, f):
                 data["table"] = []
                 closedatabase(f, data)
             return "OK"

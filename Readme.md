@@ -2,8 +2,11 @@
   <img src="image/logo.svg"/>
 </p> 
 
-### What is the Pydb project
-Welcome! This project is a simple python3 library that uses .json files as a micro noSQL local database. While it is noSQL based database, it's functions are specifically designed with SQL statements in mind. Pydb also enables you to write more complex and speed efficient queries (Shown in [Complex User Queries](#Complex-Queries)).
+### What is the HawkDB project
+Welcome! This project is a simple python3 library that uses .json files as a micro noSQL local database. While it is noSQL based database, it's functions are specifically designed with SQL statements in mind. HawkDB also enables you to write more complex and speed efficient queries.
+(Shown in [Complex User Queries](#Complex-Queries)).
+
+HawkDB was chosen as the final name for the project but the early name was PyDB
 
 Check out [Disclaimer](#Disclaimer) 
 
@@ -75,8 +78,8 @@ print(db.desc())
 
 ### TRIVAGO
 is a hotel
-you think this is a joke 
-but i serious this is an actual method
+you think this is a joke but i am 
+serious this is an actual method
 ```python
 db.trivago() 
 ```

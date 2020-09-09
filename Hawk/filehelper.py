@@ -1,7 +1,7 @@
 import json
+import mmap
 import pathlib
 from .errors import EmptyDatabaseError, EmptyTableError, JSONDecodingError
-
 
 class opendatabase():
     def __init__(self, filepath, mode, empty_table=True):
@@ -12,7 +12,9 @@ class opendatabase():
         self.empty_table = empty_table
 
     def __enter__(self):
-        self.file = open(self.filepath, self.mode)
+        self.file_open = open(self.filepath, self.mode)
+        self.file = mmap.mmap(self.file_open.fileno(), length=0, access=mmap.ACCESS_READ) 
+        
         if not self.file:
             raise EmptyDatabaseError
 
@@ -23,7 +25,8 @@ class opendatabase():
         return (data, self.file)
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
-        self.file.close()
+        # self.file.close()
+        self.file.flush()
 
 
 def closedatabase(f, data):
