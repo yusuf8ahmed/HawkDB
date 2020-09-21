@@ -24,7 +24,7 @@ Check out [Disclaimer](#Disclaimer)
 from pydb import Pydb, Query
 
 db = Pydb(connection="Users.json", tablename="Users")
-Student = Query(db)
+User = Query(db)
 
 print(db.length()) # int: number of columns
 
