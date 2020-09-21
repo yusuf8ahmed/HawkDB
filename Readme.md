@@ -21,7 +21,7 @@ Check out [Disclaimer](#Disclaimer)
 
 ## Sample usage
 ```python
-from pydb import Pydb, Query
+from Hawk import Pydb, Query
 
 db = Pydb(connection="Users.json", tablename="Users")
 User = Query(db)
